@@ -31,7 +31,7 @@ const MerchantApp: React.FC<Props> = ({
   };
 
   return (
-    <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col h-[600px] mb-32">
+    <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col h-[600px]">
       
       {/* Top Bar with Blinking Active Status */}
       <div className="flex justify-between items-start mb-6">
