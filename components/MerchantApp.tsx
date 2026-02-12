@@ -30,11 +30,12 @@ const MerchantApp: React.FC<Props> = ({
     setRequestAmt(prev => prev + val);
   };
 
+  // Fixed height h-[600px] to limit vertical expansion on mobile
   return (
-    <div className="w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col min-h-[85vh] sm:h-[600px] mb-20">
+    <div className="w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col h-[600px] mb-20 mx-auto">
       
       {/* Top Bar with Blinking Active Status */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-6 shrink-0">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <button 
@@ -54,7 +55,7 @@ const MerchantApp: React.FC<Props> = ({
       </div>
 
       {/* Input Display */}
-      <div className="bg-slate-950 rounded-2xl p-6 sm:p-8 mb-6 flex flex-col items-center justify-center border border-slate-800 shadow-inner">
+      <div className="bg-slate-950 rounded-2xl p-6 mb-6 flex flex-col items-center justify-center border border-slate-800 shadow-inner shrink-0">
         <p className="text-xs text-slate-600 mb-1 uppercase font-bold tracking-widest">Request Amount</p>
         <div className="text-5xl font-mono text-indigo-400 font-bold">
           ₹{requestAmt || '0'}
@@ -63,12 +64,12 @@ const MerchantApp: React.FC<Props> = ({
       </div>
 
       {/* Keypad */}
-      <div className="grid grid-cols-3 gap-3 mb-6 flex-1 sm:flex-none">
+      <div className="grid grid-cols-3 gap-3 mb-6 overflow-hidden">
         {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', 'C'].map(key => (
           <button
             key={key}
             onClick={() => handleKeypad(key)}
-            className="h-14 sm:h-12 bg-slate-800 hover:bg-slate-700 active:scale-95 transition-all rounded-xl font-bold text-lg flex items-center justify-center border border-slate-700/50"
+            className="h-12 bg-slate-800 hover:bg-slate-700 active:scale-95 transition-all rounded-xl font-bold text-lg flex items-center justify-center border border-slate-700/50"
           >
             {key}
           </button>
@@ -76,7 +77,7 @@ const MerchantApp: React.FC<Props> = ({
       </div>
 
       {/* Main Actions */}
-      <div className="mt-auto space-y-3 pb-4 sm:pb-0">
+      <div className="mt-auto space-y-3 shrink-0">
         <button 
           onClick={() => {
             const amt = Number(requestAmt);
@@ -86,7 +87,7 @@ const MerchantApp: React.FC<Props> = ({
             }
           }}
           disabled={!wallet.isActive || !requestAmt}
-          className={`w-full py-4 sm:py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-3 transition-all ${wallet.isActive && requestAmt ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
+          className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-3 transition-all ${wallet.isActive && requestAmt ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
         >
           <i className="fas fa-hand-holding-usd"></i> Request Payment
         </button>
