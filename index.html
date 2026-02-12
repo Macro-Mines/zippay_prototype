@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZiPPaY Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0f172a;
+        color: #f8fafc;
+        margin: 0;
+        overflow-x: hidden;
+      }
+      /* Combined blinking animations that handle both text (icons) and boxes (dots) */
+      .blinking-green {
+        animation: blink-green 1s infinite;
+      }
+      .blinking-red {
+        animation: blink-red 1s infinite;
+      }
+      @keyframes blink-green {
+        0%, 100% { 
+          opacity: 1; 
+          box-shadow: 0 0 10px #22c55e;
+          text-shadow: 0 0 8px #22c55e;
+        }
+        50% { 
+          opacity: 0.3; 
+          box-shadow: none;
+          text-shadow: none;
+        }
+      }
+      @keyframes blink-red {
+        0%, 100% { 
+          opacity: 1; 
+          box-shadow: 0 0 10px #ef4444;
+          text-shadow: 0 0 8px #ef4444;
+        }
+        50% { 
+          opacity: 0.3; 
+          box-shadow: none;
+          text-shadow: none;
+        }
+      }
+      .watch-face {
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, #1e293b, #000);
+      }
+      /* Custom scrollbar for transaction history */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
