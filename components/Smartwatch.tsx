@@ -56,8 +56,8 @@ const Smartwatch: React.FC<Props> = ({ userWallet, pendingRequest, isMobileConne
   const emergencyFee = pendingRequest ? (pendingRequest.amount * 0.04) : 0;
 
   return (
-    <div className="relative flex flex-col items-center">
-      <div className="w-24 h-48 bg-slate-800 rounded-t-3xl border-x border-t border-slate-700 mb-[-60px] shadow-lg"></div>
+    <div className="relative flex flex-col items-center py-4 scale-[0.85] xs:scale-100 transition-transform origin-center">
+      <div className="w-24 h-40 sm:h-48 bg-slate-800 rounded-t-3xl border-x border-t border-slate-700 mb-[-60px] shadow-lg"></div>
 
       <div className={`relative z-10 w-72 h-72 rounded-full border-4 border-slate-700 bg-slate-900 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex items-center justify-center p-2 transition-transform duration-75 ${shakeClass}`}>
         <div 
@@ -192,7 +192,7 @@ const Smartwatch: React.FC<Props> = ({ userWallet, pendingRequest, isMobileConne
         <div className="absolute right-[-14px] top-1/2 -translate-y-1/2 w-4 h-10 bg-slate-700 rounded-r-lg border-y border-r border-slate-600"></div>
       </div>
 
-      <div className="w-24 h-48 bg-slate-800 rounded-b-3xl border-x border-b border-slate-700 mt-[-60px] shadow-lg"></div>
+      <div className="w-24 h-40 sm:h-48 bg-slate-800 rounded-b-3xl border-x border-b border-slate-700 mt-[-60px] shadow-lg"></div>
 
       <style>{`
         @keyframes progress-watch {

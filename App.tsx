@@ -330,65 +330,75 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-slate-950 text-slate-100 p-4 md:p-8">
-      <header className="w-full max-w-6xl flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+    <div className="min-h-screen flex flex-col items-center bg-slate-950 text-slate-100 overflow-x-hidden">
+      <header className="w-full max-w-6xl flex flex-col sm:flex-row justify-between items-center px-6 py-4 border-b border-slate-800 gap-4 sm:gap-0 sticky top-0 bg-slate-950/80 backdrop-blur-md z-[60]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <i className="fas fa-bolt text-white text-xl"></i>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <i className="fas fa-bolt text-white text-lg sm:text-xl"></i>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">ZiP<span className="text-indigo-400">PaY</span></h1>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">ZiP<span className="text-indigo-400">PaY</span></h1>
         </div>
         
-        <nav className="flex gap-2 bg-slate-900 p-1 rounded-xl">
-          <button onClick={() => { setActiveMode(AppMode.UPI); sounds.playPop(); haptics.lightClick(); }} className={`px-4 py-2 rounded-lg transition-all ${activeMode === AppMode.UPI ? 'bg-indigo-600 shadow-lg' : 'hover:bg-slate-800'}`}>
-            <i className="fas fa-mobile-alt mr-2"></i> UPI App
-          </button>
-          <button onClick={() => { setActiveMode(AppMode.WATCH); sounds.playPop(); haptics.lightClick(); }} className={`px-4 py-2 rounded-lg transition-all ${activeMode === AppMode.WATCH ? 'bg-indigo-600 shadow-lg' : 'hover:bg-slate-800'}`}>
-            <i className="fas fa-clock mr-2"></i> Watch
-          </button>
-          <button onClick={() => { setActiveMode(AppMode.MERCHANT); sounds.playPop(); haptics.lightClick(); }} className={`px-4 py-2 rounded-lg transition-all ${activeMode === AppMode.MERCHANT ? 'bg-indigo-600 shadow-lg' : 'hover:bg-slate-800'}`}>
-            <i className="fas fa-store mr-2"></i> Merchant
-          </button>
+        <nav className="flex gap-1 sm:gap-2 bg-slate-900 p-1 rounded-xl w-full sm:w-auto">
+          {[
+            { mode: AppMode.UPI, icon: 'fa-mobile-alt', label: 'UPI App' },
+            { mode: AppMode.WATCH, icon: 'fa-clock', label: 'Watch' },
+            { mode: AppMode.MERCHANT, icon: 'fa-store', label: 'Merchant' }
+          ].map((item) => (
+            <button 
+              key={item.mode}
+              onClick={() => { setActiveMode(item.mode); sounds.playPop(); haptics.lightClick(); }} 
+              className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg transition-all text-sm font-semibold flex items-center justify-center gap-2 ${activeMode === item.mode ? 'bg-indigo-600 shadow-lg text-white' : 'text-slate-400 hover:bg-slate-800'}`}
+            >
+              <i className={`fas ${item.icon}`}></i>
+              <span className="hidden xs:inline">{item.label}</span>
+            </button>
+          ))}
         </nav>
       </header>
 
-      <main className="w-full flex-1 flex flex-col items-center justify-center gap-8 animate-in fade-in duration-500">
-        {activeMode === AppMode.UPI && (
-          <SmartphoneUPI 
-            userWallet={state.userWallet} 
-            connectivity={state.connectivity}
-            phoneAlert={phoneAlert}
-            onLoadMoney={loadWatchWallet} 
-            onSync={syncWatch}
-            onToggleConnectivity={setConnectivity}
-            onToggleAutoReload={toggleAutoReload}
-            onCloseAlert={() => setPhoneAlert(null)}
-            fullState={state}
-          />
-        )}
-        
-        {activeMode === AppMode.WATCH && (
-          <Smartwatch 
-            userWallet={state.userWallet} 
-            pendingRequest={state.pendingPaymentRequest}
-            isMobileConnected={state.connectivity.isBluetoothOn}
-            watchAlert={watchAlert}
-            onToggleActive={toggleUserActive}
-            onProcessPayment={processPayment}
-          />
-        )}
+      <main className="w-full flex-1 flex flex-col items-center justify-center py-4 px-0 sm:px-4 animate-in fade-in duration-500">
+        <div className="w-full max-w-md mx-auto flex flex-col items-center">
+          {activeMode === AppMode.UPI && (
+            <SmartphoneUPI 
+              userWallet={state.userWallet} 
+              connectivity={state.connectivity}
+              phoneAlert={phoneAlert}
+              onLoadMoney={loadWatchWallet} 
+              onSync={syncWatch}
+              onToggleConnectivity={setConnectivity}
+              onToggleAutoReload={toggleAutoReload}
+              onCloseAlert={() => setPhoneAlert(null)}
+              fullState={state}
+            />
+          )}
+          
+          {activeMode === AppMode.WATCH && (
+            <Smartwatch 
+              userWallet={state.userWallet} 
+              pendingRequest={state.pendingPaymentRequest}
+              isMobileConnected={state.connectivity.isBluetoothOn}
+              watchAlert={watchAlert}
+              onToggleActive={toggleUserActive}
+              onProcessPayment={processPayment}
+            />
+          )}
 
-        {activeMode === AppMode.MERCHANT && (
-          <MerchantApp 
-            wallet={state.merchantWallet}
-            phoneAlert={phoneAlert}
-            onRequestPayment={requestPayment}
-            onToggleActive={toggleMerchantActive}
-            onWithdraw={withdrawMerchant}
-            onCloseAlert={() => setPhoneAlert(null)}
-          />
-        )}
+          {activeMode === AppMode.MERCHANT && (
+            <MerchantApp 
+              wallet={state.merchantWallet}
+              phoneAlert={phoneAlert}
+              onRequestPayment={requestPayment}
+              onToggleActive={toggleMerchantActive}
+              onWithdraw={withdrawMerchant}
+              onCloseAlert={() => setPhoneAlert(null)}
+            />
+          )}
+        </div>
       </main>
+      
+      {/* Bottom Spacer for Mobile Browsers */}
+      <div className="h-20 sm:hidden"></div>
     </div>
   );
 };

@@ -14,7 +14,7 @@ interface Props {
   onToggleConnectivity: (type: 'bluetooth' | 'wifi', value: boolean) => void;
   onToggleAutoReload: (enabled: boolean) => void;
   onCloseAlert: () => void;
-  fullState: GlobalState; // Pass full state for AI context
+  fullState: GlobalState;
 }
 
 const SmartphoneUPI: React.FC<Props> = ({ 
@@ -43,12 +43,12 @@ const SmartphoneUPI: React.FC<Props> = ({
   const isWatchLinked = connectivity.isBluetoothOn && userWallet.isActive;
   const isLoadReady = connectivity.isWifiOn && isWatchLinked;
 
-  const frameClasses = "w-full max-w-sm bg-slate-900 border border-slate-800 rounded-[3rem] p-8 mb-40 shadow-2xl relative overflow-hidden flex flex-col h-[700px]";
+  const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col min-h-[85vh] sm:min-h-[700px]";
 
   if (showFullHistory) {
     return (
       <div className={`${frameClasses} animate-in slide-in-from-right duration-300`}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
+        <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
         <div className="mt-8 flex items-center gap-4 mb-8">
            <button onClick={() => { haptics.lightClick(); setShowFullHistory(false); }} className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors">
              <i className="fas fa-chevron-left text-slate-300"></i>
@@ -85,28 +85,13 @@ const SmartphoneUPI: React.FC<Props> = ({
     <div className={frameClasses}>
       {showAI && <AIAssistant state={fullState} onClose={() => setShowAI(false)} />}
       
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
-      <div className="absolute top-0 left-0 right-0 h-12 px-8 flex justify-between items-center text-[10px] font-bold text-slate-400 z-10">
-        <span className="mt-2">{time}</span>
-        <div className="flex gap-3 items-center mt-2">
-          <button 
-            onClick={() => onToggleConnectivity('bluetooth', !connectivity.isBluetoothOn)}
-            className={`transition-colors ${connectivity.isBluetoothOn ? 'text-blue-400' : 'text-slate-600'}`}
-          >
-            <i className="fab fa-bluetooth-b"></i>
-          </button>
-          <button 
-            onClick={() => onToggleConnectivity('wifi', !connectivity.isWifiOn)}
-            className={`transition-colors ${connectivity.isWifiOn ? 'text-indigo-400' : 'text-slate-600'}`}
-          >
-            <i className="fas fa-wifi"></i>
-          </button>
-          <i className="fas fa-battery-three-quarters"></i>
+      <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
+      
+      <div className="sm:mt-8 flex justify-between items-center mb-6">
+        <div className="flex flex-col">
+           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{time}</span>
+           <h2 className="text-2xl font-black">Hi, User</h2>
         </div>
-      </div>
-
-      <div className="mt-8 mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-black">Hi, User</h2>
         <div className="flex gap-2">
           <button 
             onClick={() => { haptics.mediumClick(); setShowAI(true); }}
@@ -128,8 +113,21 @@ const SmartphoneUPI: React.FC<Props> = ({
               <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-1">ZiP BALANCE</p>
               <h3 className={`text-4xl font-black ${userWallet.balance < 0 ? 'text-red-400' : 'text-white'}`}>₹{userWallet.balance.toFixed(2)}</h3>
             </div>
-            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-md">
-              <i className="fas fa-bolt text-white text-xs animate-pulse"></i>
+            <div className="flex flex-col gap-2 items-end">
+              <div className="flex gap-2">
+                 <button 
+                    onClick={() => onToggleConnectivity('bluetooth', !connectivity.isBluetoothOn)}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${connectivity.isBluetoothOn ? 'bg-blue-400/20 text-blue-400' : 'bg-white/10 text-white/30'}`}
+                  >
+                    <i className="fab fa-bluetooth-b text-xs"></i>
+                  </button>
+                  <button 
+                    onClick={() => onToggleConnectivity('wifi', !connectivity.isWifiOn)}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${connectivity.isWifiOn ? 'bg-white/30 text-white' : 'bg-white/10 text-white/30'}`}
+                  >
+                    <i className="fas fa-wifi text-xs"></i>
+                  </button>
+              </div>
             </div>
           </div>
           <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-2">
@@ -141,7 +139,7 @@ const SmartphoneUPI: React.FC<Props> = ({
               <p className="text-[9px] font-bold text-indigo-200 uppercase mb-1">WATCH CONNECTION</p>
               <p className={`text-[10px] font-black flex items-center gap-1.5 ${isWatchLinked ? 'text-green-300' : 'text-indigo-300 opacity-60'}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${isWatchLinked ? 'bg-green-400 animate-pulse' : 'bg-indigo-400'}`}></span>
-                {isWatchLinked ? 'CONNECTED' : 'DISCONNECTED'}
+                {isWatchLinked ? 'CONNECTED' : 'OFFLINE'}
               </p>
             </div>
           </div>
@@ -149,15 +147,15 @@ const SmartphoneUPI: React.FC<Props> = ({
       </div>
 
       <div className="bg-slate-800/40 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center justify-between transition-all">
-        <div>
+        <div className="flex-1">
           <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-0.5">Auto-Reload</h4>
-          <p className="text-[8px] text-slate-500 font-medium">Reload to ₹200 if balance drops &lt; ₹50</p>
+          <p className="text-[8px] text-slate-500 font-medium">Auto-fund ₹200 when balance &lt; ₹50</p>
         </div>
         <button 
           onClick={() => { haptics.lightClick(); onToggleAutoReload(!userWallet.isAutoReloadEnabled); }}
-          className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${userWallet.isAutoReloadEnabled ? 'bg-indigo-600' : 'bg-slate-700'}`}
+          className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${userWallet.isAutoReloadEnabled ? 'bg-indigo-600' : 'bg-slate-700'}`}
         >
-          <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all duration-300 ${userWallet.isAutoReloadEnabled ? 'left-6' : 'left-1'}`}></div>
+          <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-md transition-all duration-300 ${userWallet.isAutoReloadEnabled ? 'left-7' : 'left-1'}`}></div>
         </button>
       </div>
 
@@ -171,6 +169,7 @@ const SmartphoneUPI: React.FC<Props> = ({
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
             <input 
               type="number" 
+              inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
@@ -185,14 +184,14 @@ const SmartphoneUPI: React.FC<Props> = ({
                 setAmount('');
               }}
               disabled={!isLoadReady || !amount}
-              className={`flex-1 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 ${isLoadReady && amount ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+              className={`flex-1 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 ${isLoadReady && amount ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
             >
               <i className="fas fa-plus-circle"></i> Load
             </button>
             <button 
               onClick={() => { haptics.mediumClick(); onSync(); }}
               disabled={!connectivity.isBluetoothOn}
-              className={`flex-1 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${connectivity.isBluetoothOn ? 'bg-slate-800 text-indigo-400 border border-indigo-500/10 hover:border-indigo-500/40 active:scale-95' : 'bg-slate-900/50 text-slate-700 border border-slate-800 cursor-not-allowed'}`}
+              className={`flex-1 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${connectivity.isBluetoothOn ? 'bg-slate-800 text-indigo-400 border border-indigo-500/10 hover:border-indigo-500/40 active:scale-95' : 'bg-slate-900/50 text-slate-700 border border-slate-800 cursor-not-allowed'}`}
             >
               <i className="fas fa-sync-alt"></i> Sync
             </button>
@@ -200,6 +199,7 @@ const SmartphoneUPI: React.FC<Props> = ({
         </div>
       </div>
 
+      {/* RECENT ACTIVITY SECTION */}
       <div className="flex-1 flex flex-col min-h-0">
         <div className="flex justify-between items-center mb-4 px-1">
           <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Recent Activity</h4>
@@ -210,23 +210,29 @@ const SmartphoneUPI: React.FC<Props> = ({
             See All
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-6">
-          {userWallet.transactions.slice(0, 5).map(tx => (
-            <div key={tx.id} className="bg-slate-800/30 p-3 rounded-2xl flex items-center justify-between border border-slate-800/50 hover:border-slate-700 transition-colors">
-              <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
-                  <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
+        
+        {/* Scrollable Container for Transactions (limited to 2) */}
+        <div className="h-32 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-6 snap-y snap-mandatory">
+          {userWallet.transactions.length === 0 ? (
+            <div className="text-center py-6 text-[10px] text-slate-600 font-bold uppercase tracking-widest">No Recent Activity</div>
+          ) : (
+            userWallet.transactions.slice(0, 2).map(tx => (
+              <div key={tx.id} className="bg-slate-800/30 p-3 rounded-2xl flex items-center justify-between border border-slate-800/50 hover:border-slate-700 transition-colors snap-start">
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
+                    <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold truncate max-w-[120px]">{tx.peer}</p>
+                    <p className="text-[8px] text-slate-500">{new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold truncate max-w-[120px]">{tx.peer}</p>
-                  <p className="text-[8px] text-slate-500">{new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                </div>
+                <p className={`text-xs font-black ${tx.type === 'CREDIT' ? 'text-green-400' : (tx.peer.includes('Emergency') ? 'text-red-400' : 'text-slate-200')}`}>
+                  {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
+                </p>
               </div>
-              <p className={`text-xs font-black ${tx.type === 'CREDIT' ? 'text-green-400' : (tx.peer.includes('Emergency') ? 'text-red-400' : 'text-slate-200')}`}>
-                {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
-              </p>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
