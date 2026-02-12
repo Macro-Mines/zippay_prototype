@@ -16,7 +16,6 @@
         margin: 0;
         overflow-x: hidden;
       }
-      /* Combined blinking animations that handle both text (icons) and boxes (dots) */
       .blinking-green {
         animation: blink-green 1s infinite;
       }
@@ -52,7 +51,6 @@
         border-radius: 50%;
         background: radial-gradient(circle at center, #1e293b, #000);
       }
-      /* Custom scrollbar for transaction history */
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
       }
@@ -67,14 +65,18 @@
   <script type="importmap">
 {
   "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>

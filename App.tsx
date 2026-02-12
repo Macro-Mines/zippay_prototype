@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AppMode, GlobalState, Transaction, NotificationType } from './types';
 import SmartphoneUPI from './components/SmartphoneUPI';
@@ -362,6 +363,7 @@ const App: React.FC = () => {
             onToggleConnectivity={setConnectivity}
             onToggleAutoReload={toggleAutoReload}
             onCloseAlert={() => setPhoneAlert(null)}
+            fullState={state}
           />
         )}
         

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { GlobalState, NotificationType } from '../types';
 import NotificationOverlay from './NotificationOverlay';
+import AIAssistant from './AIAssistant';
 import { haptics } from '../utils/haptics';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
   onToggleConnectivity: (type: 'bluetooth' | 'wifi', value: boolean) => void;
   onToggleAutoReload: (enabled: boolean) => void;
   onCloseAlert: () => void;
+  fullState: GlobalState; // Pass full state for AI context
 }
 
 const SmartphoneUPI: React.FC<Props> = ({ 
@@ -23,10 +25,12 @@ const SmartphoneUPI: React.FC<Props> = ({
   onSync, 
   onToggleConnectivity,
   onToggleAutoReload,
-  onCloseAlert
+  onCloseAlert,
+  fullState
 }) => {
   const [amount, setAmount] = useState<string>('');
   const [showFullHistory, setShowFullHistory] = useState(false);
+  const [showAI, setShowAI] = useState(false);
   const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
 
   useEffect(() => {
@@ -45,14 +49,12 @@ const SmartphoneUPI: React.FC<Props> = ({
     return (
       <div className={`${frameClasses} animate-in slide-in-from-right duration-300`}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
-        
         <div className="mt-8 flex items-center gap-4 mb-8">
            <button onClick={() => { haptics.lightClick(); setShowFullHistory(false); }} className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors">
              <i className="fas fa-chevron-left text-slate-300"></i>
            </button>
            <h2 className="text-xl font-bold">Transaction History</h2>
         </div>
-
         <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-10">
           {userWallet.transactions.length === 0 ? (
             <div className="text-center py-20 text-slate-500">No records found</div>
@@ -75,16 +77,14 @@ const SmartphoneUPI: React.FC<Props> = ({
             ))
           )}
         </div>
-
-        <div className="mt-2 flex justify-center pb-2">
-          <div className="w-24 h-1 bg-slate-800 rounded-full"></div>
-        </div>
       </div>
     );
   }
 
   return (
     <div className={frameClasses}>
+      {showAI && <AIAssistant state={fullState} onClose={() => setShowAI(false)} />}
+      
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
       <div className="absolute top-0 left-0 right-0 h-12 px-8 flex justify-between items-center text-[10px] font-bold text-slate-400 z-10">
         <span className="mt-2">{time}</span>
@@ -107,8 +107,16 @@ const SmartphoneUPI: React.FC<Props> = ({
 
       <div className="mt-8 mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-black">Hi, User</h2>
-        <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-700">
-          <i className="fas fa-user text-slate-500"></i>
+        <div className="flex gap-2">
+          <button 
+            onClick={() => { haptics.mediumClick(); setShowAI(true); }}
+            className="w-10 h-10 rounded-full bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10"
+          >
+            <i className="fas fa-robot"></i>
+          </button>
+          <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-700">
+            <i className="fas fa-user text-slate-500"></i>
+          </div>
         </div>
       </div>
 
@@ -124,7 +132,6 @@ const SmartphoneUPI: React.FC<Props> = ({
               <i className="fas fa-bolt text-white text-xs animate-pulse"></i>
             </div>
           </div>
-          
           <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-2">
             <div>
               <p className="text-[9px] font-bold text-indigo-200 uppercase mb-1">PRIMARY BANK</p>
@@ -191,11 +198,6 @@ const SmartphoneUPI: React.FC<Props> = ({
             </button>
           </div>
         </div>
-        {!isLoadReady && (
-          <p className="text-[9px] text-red-500/70 mt-3 ml-1 font-medium">
-            {!connectivity.isWifiOn ? '• Turn on Wi-Fi' : !isWatchLinked ? '• Connect watch via Bluetooth' : ''}
-          </p>
-        )}
       </div>
 
       <div className="flex-1 flex flex-col min-h-0">
@@ -225,11 +227,6 @@ const SmartphoneUPI: React.FC<Props> = ({
               </p>
             </div>
           ))}
-          {userWallet.transactions.length === 0 && (
-            <div className="text-center py-6 border-2 border-dashed border-slate-800 rounded-2xl">
-              <p className="text-[10px] text-slate-600 font-bold uppercase">No Transactions</p>
-            </div>
-          )}
         </div>
       </div>
 
@@ -241,10 +238,6 @@ const SmartphoneUPI: React.FC<Props> = ({
           onClose={onCloseAlert} 
         />
       )}
-
-      <div className="mt-2 flex justify-center pb-2">
-        <div className="w-24 h-1 bg-slate-800 rounded-full"></div>
-      </div>
     </div>
   );
 };
