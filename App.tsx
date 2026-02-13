@@ -23,7 +23,7 @@ const initialState: GlobalState = {
     balance: 0,
     bankBalance: 0,
     transactions: [],
-    isActive: true,
+    isActive: false, // Starts offline as per new workflow
   },
   pendingPaymentRequest: null,
   connectivity: {
@@ -53,6 +53,22 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
+
+  // NEW: Proximity Workflow - Terminal auto-activates when watch is active
+  useEffect(() => {
+    const watchIsActive = state.userWallet.isActive;
+    if (state.merchantWallet.isActive !== watchIsActive) {
+      setState(prev => ({
+        ...prev,
+        merchantWallet: { ...prev.merchantWallet, isActive: watchIsActive }
+      }));
+      
+      // Feedback for connection established
+      if (watchIsActive && activeMode === AppMode.MERCHANT) {
+        triggerPhoneAlert("Watch Detected: Connection Established", 'success');
+      }
+    }
+  }, [state.userWallet.isActive, state.merchantWallet.isActive, activeMode]);
 
   const triggerWatchAlert = useCallback((message: string, type: NotificationType = 'error') => {
     setWatchAlert({ message, type });
@@ -139,15 +155,6 @@ const App: React.FC = () => {
     triggerWatchAlert(newState ? 'WATCH ACTIVE' : 'WATCH INACTIVE', newState ? 'success' : 'error');
   };
 
-  const toggleMerchantActive = () => {
-    sounds.playPop();
-    haptics.mediumClick();
-    setState(prev => ({
-      ...prev,
-      merchantWallet: { ...prev.merchantWallet, isActive: !prev.merchantWallet.isActive }
-    }));
-  };
-
   const setConnectivity = (type: 'bluetooth' | 'wifi', value: boolean) => {
     sounds.playPing();
     haptics.lightClick();
@@ -207,7 +214,10 @@ const App: React.FC = () => {
   };
 
   const requestPayment = (amount: number) => {
-    if (!state.merchantWallet.isActive) return;
+    if (!state.merchantWallet.isActive) {
+       triggerPhoneAlert("Terminal Offline: No watch detected in range.", 'error');
+       return;
+    }
     if (!state.userWallet.isActive) {
       return triggerWatchAlert("WATCH INACTIVE", 'error');
     }
@@ -389,7 +399,6 @@ const App: React.FC = () => {
               wallet={state.merchantWallet}
               phoneAlert={phoneAlert}
               onRequestPayment={requestPayment}
-              onToggleActive={toggleMerchantActive}
               onWithdraw={withdrawMerchant}
               onCloseAlert={() => setPhoneAlert(null)}
             />
