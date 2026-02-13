@@ -43,34 +43,37 @@ const SmartphoneUPI: React.FC<Props> = ({
   const isWatchLinked = connectivity.isBluetoothOn && userWallet.isActive;
   const isLoadReady = connectivity.isWifiOn && isWatchLinked;
 
-  const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col min-h-[85vh] sm:min-h-[700px]";
+  // Fixed height h-[640px] to prevent frame extension
+  const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col h-[640px]";
 
   if (showFullHistory) {
     return (
-      <div className={`${frameClasses} animate-in slide-in-from-right duration-300`}>
+      <div className={`${frameClasses} animate-in slide-in-from-right duration-300 mx-auto`}>
         <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
-        <div className="mt-8 flex items-center gap-4 mb-8">
+        <div className="mt-8 flex items-center gap-4 mb-6 shrink-0">
            <button onClick={() => { haptics.lightClick(); setShowFullHistory(false); }} className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors">
              <i className="fas fa-chevron-left text-slate-300"></i>
            </button>
-           <h2 className="text-xl font-bold">Transaction History</h2>
+           <h2 className="text-xl font-bold">History</h2>
         </div>
+        
+        {/* Scrollable list within fixed frame */}
         <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-10">
           {userWallet.transactions.length === 0 ? (
-            <div className="text-center py-20 text-slate-500">No records found</div>
+            <div className="text-center py-20 text-slate-500 text-xs font-bold uppercase tracking-widest">No records found</div>
           ) : (
             userWallet.transactions.map(tx => (
-              <div key={tx.id} className="bg-slate-800/50 p-4 rounded-2xl flex items-center justify-between border border-slate-800">
+              <div key={tx.id} className="bg-slate-800/50 p-4 rounded-2xl flex items-center justify-between border border-slate-800/50">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'CREDIT' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
                     <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm">{tx.peer}</p>
-                    <p className="text-[10px] text-slate-500">{new Date(tx.timestamp).toLocaleString()}</p>
+                  <div className="min-w-0">
+                    <p className="font-bold text-xs truncate">{tx.peer}</p>
+                    <p className="text-[9px] text-slate-500 font-medium">{new Date(tx.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</p>
                   </div>
                 </div>
-                <p className={`font-bold text-base ${tx.type === 'CREDIT' ? 'text-green-500' : 'text-slate-100'}`}>
+                <p className={`font-black text-sm whitespace-nowrap ${tx.type === 'CREDIT' ? 'text-green-500' : 'text-slate-100'}`}>
                   {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
                 </p>
               </div>
@@ -82,12 +85,12 @@ const SmartphoneUPI: React.FC<Props> = ({
   }
 
   return (
-    <div className={frameClasses}>
+    <div className={`${frameClasses} mx-auto`}>
       {showAI && <AIAssistant state={fullState} onClose={() => setShowAI(false)} />}
       
       <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-20"></div>
       
-      <div className="sm:mt-8 flex justify-between items-center mb-6">
+      <div className="sm:mt-8 flex justify-between items-center mb-6 shrink-0">
         <div className="flex flex-col">
            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{time}</span>
            <h2 className="text-2xl font-black">Hi, User</h2>
@@ -105,7 +108,7 @@ const SmartphoneUPI: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-[2rem] p-6 mb-4 shadow-xl shadow-indigo-500/20 relative overflow-hidden group">
+      <div className="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-[2rem] p-6 mb-4 shadow-xl shadow-indigo-500/20 relative overflow-hidden group shrink-0">
         <div className="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-4">
@@ -146,7 +149,7 @@ const SmartphoneUPI: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="bg-slate-800/40 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center justify-between transition-all">
+      <div className="bg-slate-800/40 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center justify-between transition-all shrink-0">
         <div className="flex-1">
           <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-0.5">Auto-Reload</h4>
           <p className="text-[8px] text-slate-500 font-medium">Auto-fund ₹200 when balance &lt; ₹50</p>
@@ -159,21 +162,21 @@ const SmartphoneUPI: React.FC<Props> = ({
         </button>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6 shrink-0">
         <div className="flex justify-between items-center mb-3 px-1">
           <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">TOP-UP WALLET</h4>
           <span className="text-[8px] font-bold text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded-full">MICRO-PAY READY</span>
         </div>
         <div className="space-y-3">
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₹</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">₹</span>
             <input 
               type="number" 
               inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 pl-8 pr-4 text-sm font-bold focus:outline-none focus:border-indigo-600 transition-all placeholder:text-slate-800"
+              className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 pl-8 pr-4 text-sm font-bold focus:outline-none focus:border-indigo-600 transition-all placeholder:text-slate-800"
             />
           </div>
           <div className="flex gap-3">
@@ -184,14 +187,14 @@ const SmartphoneUPI: React.FC<Props> = ({
                 setAmount('');
               }}
               disabled={!isLoadReady || !amount}
-              className={`flex-1 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 ${isLoadReady && amount ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+              className={`flex-1 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 ${isLoadReady && amount ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
             >
               <i className="fas fa-plus-circle"></i> Load
             </button>
             <button 
               onClick={() => { haptics.mediumClick(); onSync(); }}
               disabled={!connectivity.isBluetoothOn}
-              className={`flex-1 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${connectivity.isBluetoothOn ? 'bg-slate-800 text-indigo-400 border border-indigo-500/10 hover:border-indigo-500/40 active:scale-95' : 'bg-slate-900/50 text-slate-700 border border-slate-800 cursor-not-allowed'}`}
+              className={`flex-1 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${connectivity.isBluetoothOn ? 'bg-slate-800 text-indigo-400 border border-indigo-500/10 hover:border-indigo-500/40 active:scale-95' : 'bg-slate-900/50 text-slate-700 border border-slate-800 cursor-not-allowed'}`}
             >
               <i className="fas fa-sync-alt"></i> Sync
             </button>
@@ -199,9 +202,8 @@ const SmartphoneUPI: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* RECENT ACTIVITY SECTION */}
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex justify-between items-center mb-4 px-1">
+        <div className="flex justify-between items-center mb-3 px-1 shrink-0">
           <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Recent Activity</h4>
           <button 
             onClick={() => { haptics.lightClick(); setShowFullHistory(true); }} 
@@ -211,8 +213,7 @@ const SmartphoneUPI: React.FC<Props> = ({
           </button>
         </div>
         
-        {/* Scrollable Container for Transactions (limited to 2) */}
-        <div className="h-32 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-6 snap-y snap-mandatory">
+        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-6 snap-y snap-mandatory">
           {userWallet.transactions.length === 0 ? (
             <div className="text-center py-6 text-[10px] text-slate-600 font-bold uppercase tracking-widest">No Recent Activity</div>
           ) : (
@@ -222,9 +223,9 @@ const SmartphoneUPI: React.FC<Props> = ({
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
                     <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-bold truncate max-w-[120px]">{tx.peer}</p>
-                    <p className="text-[8px] text-slate-500">{new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    <p className="text-[8px] text-slate-500 font-medium">{new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                   </div>
                 </div>
                 <p className={`text-xs font-black ${tx.type === 'CREDIT' ? 'text-green-400' : (tx.peer.includes('Emergency') ? 'text-red-400' : 'text-slate-200')}`}>
