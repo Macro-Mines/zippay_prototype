@@ -220,7 +220,7 @@ const SmartphoneUPI: React.FC<Props> = ({
         <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-20 snap-y snap-mandatory flex flex-col">
           {userWallet.transactions.length === 0 ? (
             <div className="flex-1 flex items-center justify-center mb-4">
-               <div className="w-full border-2 border-dashed border-slate-800/60 rounded-[2rem] py-10 flex items-center justify-center bg-slate-900/10">
+               <div className="w-full border-2 border-dashed border-slate-800/60 rounded-[2rem] py-4 flex items-center justify-center bg-slate-900/10">
                  <p className="text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px] opacity-80">No Transactions</p>
                </div>
             </div>
