@@ -51,10 +51,10 @@ const NotificationOverlay: React.FC<Props> = ({ message, type, duration, onClose
     <div className={containerClasses}>
       <div className="absolute inset-0 bg-indigo-950/60 pointer-events-auto" onClick={() => setIsClosing(true)}></div>
       
-      <div className={`relative flex flex-col items-center justify-center w-full transition-all duration-500 ${showContent ? 'translate-y-0 scale-100' : 'translate-y-10 scale-90'}`}>
+      <div className={`relative flex flex-col items-center justify-center w-full transition-all duration-500 border-none ${showContent ? 'translate-y-0 scale-100' : 'translate-y-10 scale-90'}`}>
         
         {/* Animated Success Icon Container */}
-        <div className="relative w-28 h-28 mb-6 flex items-center justify-center">
+        <div className="relative w-28 h-28 mb-6 flex items-center justify-center border-none">
           <div className="absolute inset-0 bg-green-500/20 rounded-full animate-ping-slow"></div>
           <div className="absolute inset-4 bg-green-500/10 rounded-full animate-ping-slower"></div>
           
@@ -70,8 +70,10 @@ const NotificationOverlay: React.FC<Props> = ({ message, type, duration, onClose
           </div>
         </div>
 
-        <div className={`text-center space-y-2 transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="text-xl font-black tracking-tight text-white uppercase">Payment Successful</h2>
+        <div className={`text-center space-y-2 transition-all duration-700 delay-300 border-none ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className="text-xl font-black tracking-tight text-white uppercase">
+            {message.toLowerCase().includes('sync') ? 'Sync Successful' : 'Payment Successful'}
+          </h2>
           <div className="h-0.5 w-8 bg-green-500/50 mx-auto rounded-full"></div>
           <p className="text-indigo-100/70 text-xs font-bold px-6 leading-tight">
             {message}
@@ -80,7 +82,7 @@ const NotificationOverlay: React.FC<Props> = ({ message, type, duration, onClose
 
         <button 
           onClick={() => setIsClosing(true)}
-          className={`mt-10 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-[10px] font-black tracking-widest uppercase transition-all duration-500 pointer-events-auto active:scale-95 ${showContent ? 'opacity-100' : 'opacity-0'}`}
+          className={`mt-10 px-6 py-2 bg-white/10 hover:bg-white/20 border-0 rounded-full text-[10px] font-black tracking-widest uppercase transition-all duration-500 pointer-events-auto active:scale-95 ${showContent ? 'opacity-100' : 'opacity-0'}`}
         >
           Done
         </button>

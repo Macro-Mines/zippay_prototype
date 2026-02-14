@@ -43,7 +43,7 @@ const SmartphoneUPI: React.FC<Props> = ({
   const isWatchLinked = connectivity.isBluetoothOn && userWallet.isActive;
   const isLoadReady = connectivity.isWifiOn && isWatchLinked;
 
-  const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col h-[640px]";
+  const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col h-[680px]";
 
   if (showFullHistory) {
     return (
@@ -151,7 +151,7 @@ const SmartphoneUPI: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="bg-slate-800/40 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center justify-between transition-all shrink-0">
+      <div className="bg-slate-800/40 rounded-2xl p-4 mb-4 border border-slate-800/50 flex items-center justify-between transition-all shrink-0">
         <div className="flex-1">
           <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-0.5">Auto-Reload</h4>
           <p className="text-[8px] text-slate-500 font-medium">Auto-fund ₹200 when balance &lt; ₹50</p>
@@ -205,38 +205,38 @@ const SmartphoneUPI: React.FC<Props> = ({
       </div>
 
       <div className="flex-1 flex flex-col min-h-0">
-        {/* RECENT ACTIVITY Header Redesign */}
-        <div className="flex justify-between items-center mb-4 px-1 shrink-0">
-          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em]">Recent Activity</h4>
+        <div className="flex justify-between items-center mb-5 px-1 shrink-0">
+          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Recent Activity</h4>
           <button 
             onClick={() => { haptics.lightClick(); setShowFullHistory(true); }} 
-            className="text-[10px] font-bold text-indigo-400 uppercase tracking-wide hover:underline transition-all"
+            className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest hover:text-indigo-300 transition-all"
           >
             See All
           </button>
         </div>
         
-        {/* RECENT ACTIVITY List/Empty State Redesign */}
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-20 snap-y snap-mandatory flex flex-col">
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar pb-10 px-1 flex flex-col">
           {userWallet.transactions.length === 0 ? (
             <div className="flex-1 flex items-center justify-center mb-4">
-               <div className="w-full border-2 border-dashed border-slate-800/60 rounded-[2rem] py-4 flex items-center justify-center bg-slate-900/10">
-                 <p className="text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px] opacity-80">No Transactions</p>
+               <div className="w-full border-2 border-dashed border-slate-800/60 rounded-[2.5rem] py-8 flex items-center justify-center bg-slate-900/10">
+                 <p className="text-slate-600 font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">No Transactions</p>
                </div>
             </div>
           ) : (
             userWallet.transactions.slice(0, 3).map(tx => (
-              <div key={tx.id} className="bg-slate-800/30 p-3 rounded-2xl flex items-center justify-between border border-slate-800/50 hover:border-slate-700 transition-colors snap-start shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
+              <div key={tx.id} className="bg-slate-800/40 p-5 rounded-[2rem] flex items-center justify-between border border-slate-800/40 hover:border-slate-700 transition-colors shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className={`w-11 h-11 rounded-full flex items-center justify-center text-xs ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700/60 text-slate-400'}`}>
                     <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold truncate max-w-[120px]">{tx.peer}</p>
-                    <p className="text-[8px] text-slate-500 font-medium">{new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    <p className="text-[13px] font-bold text-white truncate max-w-[140px]">{tx.peer}</p>
+                    <p className="text-[10px] text-slate-500 font-medium tracking-tight">
+                      {new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
                 </div>
-                <p className={`text-xs font-black ${tx.type === 'CREDIT' ? 'text-green-400' : (tx.peer.includes('Emergency') ? 'text-red-400' : 'text-slate-200')}`}>
+                <p className={`text-[14px] font-black tracking-tight ${tx.type === 'CREDIT' ? 'text-green-400' : (tx.peer.includes('Emergency') ? 'text-red-400' : 'text-slate-200')}`}>
                   {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
                 </p>
               </div>
@@ -244,9 +244,9 @@ const SmartphoneUPI: React.FC<Props> = ({
           )}
         </div>
 
-        {/* Bottom Home Indicator Pill */}
-        <div className="mt-auto pt-2 pb-1 shrink-0">
-           <div className="w-16 h-1.5 bg-slate-800/60 rounded-full mx-auto"></div>
+        {/* Home Indicator Pillar */}
+        <div className="mt-auto py-2 shrink-0">
+           <div className="w-16 h-1.5 bg-slate-800/50 rounded-full mx-auto"></div>
         </div>
       </div>
 
