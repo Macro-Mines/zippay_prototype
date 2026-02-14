@@ -43,7 +43,6 @@ const SmartphoneUPI: React.FC<Props> = ({
   const isWatchLinked = connectivity.isBluetoothOn && userWallet.isActive;
   const isLoadReady = connectivity.isWifiOn && isWatchLinked;
 
-  // Fixed height h-[640px] to prevent frame extension
   const frameClasses = "w-full sm:max-w-sm bg-slate-900 sm:border border-slate-800 sm:rounded-[3rem] p-6 sm:p-8 mb-4 sm:mb-20 shadow-2xl relative overflow-hidden flex flex-col h-[640px]";
 
   if (showFullHistory) {
@@ -57,10 +56,13 @@ const SmartphoneUPI: React.FC<Props> = ({
            <h2 className="text-xl font-bold">History</h2>
         </div>
         
-        {/* Scrollable list within fixed frame */}
         <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-10">
           {userWallet.transactions.length === 0 ? (
-            <div className="text-center py-20 text-slate-500 text-xs font-bold uppercase tracking-widest">No records found</div>
+            <div className="flex-1 flex items-center justify-center">
+               <div className="w-full border-2 border-dashed border-slate-800 rounded-[2rem] py-12 flex items-center justify-center bg-slate-900/20">
+                 <p className="text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px]">No Transactions</p>
+               </div>
+            </div>
           ) : (
             userWallet.transactions.map(tx => (
               <div key={tx.id} className="bg-slate-800/50 p-4 rounded-2xl flex items-center justify-between border border-slate-800/50">
@@ -176,7 +178,7 @@ const SmartphoneUPI: React.FC<Props> = ({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 pl-8 pr-4 text-sm font-bold focus:outline-none focus:border-indigo-600 transition-all placeholder:text-slate-800"
+              className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 pl-8 pr-4 text-sm font-bold focus:outline-none focus:border-indigo-600 transition-all placeholder:text-slate-800 text-white"
             />
           </div>
           <div className="flex gap-3">
@@ -203,22 +205,28 @@ const SmartphoneUPI: React.FC<Props> = ({
       </div>
 
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex justify-between items-center mb-3 px-1 shrink-0">
-          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Recent Activity</h4>
+        {/* RECENT ACTIVITY Header Redesign */}
+        <div className="flex justify-between items-center mb-4 px-1 shrink-0">
+          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em]">Recent Activity</h4>
           <button 
             onClick={() => { haptics.lightClick(); setShowFullHistory(true); }} 
-            className="text-[10px] font-bold text-indigo-400 uppercase hover:underline"
+            className="text-[10px] font-bold text-indigo-400 uppercase tracking-wide hover:underline transition-all"
           >
             See All
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-6 snap-y snap-mandatory">
+        {/* RECENT ACTIVITY List/Empty State Redesign */}
+        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar pb-2 snap-y snap-mandatory flex flex-col">
           {userWallet.transactions.length === 0 ? (
-            <div className="text-center py-6 text-[10px] text-slate-600 font-bold uppercase tracking-widest">No Recent Activity</div>
+            <div className="flex-1 flex items-center justify-center mb-4">
+               <div className="w-full border-2 border-dashed border-slate-800/60 rounded-[2rem] py-10 flex items-center justify-center bg-slate-900/10">
+                 <p className="text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px] opacity-80">No Transactions</p>
+               </div>
+            </div>
           ) : (
-            userWallet.transactions.slice(0, 2).map(tx => (
-              <div key={tx.id} className="bg-slate-800/30 p-3 rounded-2xl flex items-center justify-between border border-slate-800/50 hover:border-slate-700 transition-colors snap-start">
+            userWallet.transactions.slice(0, 3).map(tx => (
+              <div key={tx.id} className="bg-slate-800/30 p-3 rounded-2xl flex items-center justify-between border border-slate-800/50 hover:border-slate-700 transition-colors snap-start shrink-0">
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] ${tx.type === 'CREDIT' ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-400'}`}>
                     <i className={`fas ${tx.type === 'CREDIT' ? 'fa-arrow-down' : 'fa-arrow-up'}`}></i>
@@ -234,6 +242,11 @@ const SmartphoneUPI: React.FC<Props> = ({
               </div>
             ))
           )}
+        </div>
+
+        {/* Bottom Home Indicator Pill */}
+        <div className="mt-auto pt-2 pb-1 shrink-0">
+           <div className="w-16 h-1.5 bg-slate-800/60 rounded-full mx-auto"></div>
         </div>
       </div>
 
