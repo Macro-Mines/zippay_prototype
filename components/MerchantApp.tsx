@@ -46,7 +46,7 @@ const MerchantApp: React.FC<Props> = ({
           <h2 className="text-xl font-bold mt-0.5 text-white">Merchant Hub</h2>
         </div>
         <div className="text-right">
-          <p className="text-[9px] text-slate-500 uppercase font-bold tracking-tight">Wallet Balance</p>
+          <p className="text-[9px] text-slate-500 uppercase font-bold tracking-tight">Balance</p>
           <p className="text-lg font-black text-green-400">₹{wallet.balance.toFixed(2)}</p>
         </div>
       </div>
@@ -98,7 +98,7 @@ const MerchantApp: React.FC<Props> = ({
             onClick={() => { haptics.lightClick(); onWithdraw(); }}
             className="flex-1 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors text-slate-300"
           >
-            <i className="fas fa-university"></i> Settle To Bank
+            <i className="fas fa-university"></i> Settle
           </button>
           <div className="flex-[0.8] bg-slate-950 rounded-xl px-3 flex flex-col justify-center border border-slate-800">
              <span className="text-[7px] text-slate-500 uppercase font-black">Bank Ledger</span>
